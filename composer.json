@@ -1,0 +1,29 @@
+{
+    "name": "hao/message",
+    "homepage": "https://github.com/JZhao1020/message",
+    "description": "push message",
+    "type": "library",
+    "authors": [
+        {
+            "name": "JZ浩",
+            "email": "18816784184@163.com"
+        }
+    ],
+    "keywords": [
+        "Message"
+    ],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "message\\": "src"
+        },
+        "files": [
+            "src/common.php"
+        ]
+    },
+    "require": {
+        "php": ">=7.0",
+        "jpush/jpush": "^3.6",
+        "phpmailer/phpmailer": "^6.1.8"
+    }
+}
