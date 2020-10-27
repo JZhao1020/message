@@ -72,11 +72,11 @@ class EmailSend{
                 $mail->isHTML(true);
                 $mail->Subject = self::$name . '-验证码';
                 if($this->lang == 'en'){
-                    $mail->Body = self::htmbodyen($email, $code);//'【Molecular Future】您好,您的'.$effect.'验证码是:'.$code;
+                    $mail->Body = self::htmbodyen($email, $code);
                 }else if ($this->lang == 'hk'){
                     $mail->Body = Chinese::toTraditional(self::htmbody($email, $code))[0];
                 }else{
-                    $mail->Body = self::htmbody($email, $code);//'【Molecular Future】您好,您的'.$effect.'验证码是:'.$code;
+                    $mail->Body = self::htmbody($email, $code);
                 }
 
                 //发送失败!
