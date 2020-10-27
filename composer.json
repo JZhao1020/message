@@ -23,7 +23,7 @@
     },
     "require": {
         "php": ">=7.0",
-        "jpush/jpush": "^3.6",
-        "phpmailer/phpmailer": "^6.1.8"
+        "jpush/jpush": "^3",
+        "phpmailer/phpmailer": "^6"
     }
 }
