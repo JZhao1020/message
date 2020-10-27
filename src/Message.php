@@ -41,7 +41,7 @@ class Message{
         if (!file_exists(__DIR__ . '/driver/'. ucfirst($gateway) . 'Send.php')) {
             throw new \Exception("Gateway [$gateway] is not supported.");
         }
-        $gateway = __NAMESPACE__ . '\\driver\\' . ucfirst($gateway) . 'Send';
+        $gateway_class = __NAMESPACE__ . '\\driver\\' . ucfirst($gateway) . 'Send';
 
         $log = new Log();
         if(!$this->config){
@@ -52,6 +52,6 @@ class Message{
 
             $this->config = include $file;
         }
-        return new $gateway($this->config, $lang, $log);
+        return new $gateway_class($this->config, $lang, $log);
     }
 }

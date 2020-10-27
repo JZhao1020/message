@@ -9,7 +9,6 @@ use Yurun\Util\Chinese;
 
 class EmailSend{
     private $log;
-    private $lang;
     // 邮件配置
     private static $host = '';
     private static $user = '';
@@ -17,6 +16,7 @@ class EmailSend{
     private static $name = '';
     private static $system = '';
     private static $debug = '';
+    private static $lang;
 
     /**
      * EmailSend constructor.
@@ -26,7 +26,7 @@ class EmailSend{
      */
     public function __construct($config = [], $lang = 'cn', $log){
         $this->log = $log;
-        $this->lang = $lang;
+        self::$lang = $lang;
 
         self::$host = $config['host'];
         self::$user = $config['user'];
@@ -71,9 +71,9 @@ class EmailSend{
                 // 将电子邮件格式设置为HTML
                 $mail->isHTML(true);
                 $mail->Subject = self::$name . '-验证码';
-                if($this->lang == 'en'){
+                if(self::$lang == 'en'){
                     $mail->Body = self::htmbodyen($email, $code);
-                }else if ($this->lang == 'hk'){
+                }else if (self::$lang == 'hk'){
                     $mail->Body = Chinese::toTraditional(self::htmbody($email, $code))[0];
                 }else{
                     $mail->Body = self::htmbody($email, $code);
@@ -102,7 +102,13 @@ class EmailSend{
      * @return array|bool|int|mixed|string|string[]
      */
     public function sendText($email, $key, $params = []){
-        $body = getTempMessage('email', $key, $this->lang, $params);
+        $body = getTempMessage('email', $key, self::$lang, $params);
+        if (isset($body['need_param']))
+            return return_msg(500,'缺少消息模板参数'.$body['need_param']);
+
+        if(is_numeric($body))
+            return return_msg(404,'解析消息模板失败');
+
         if(!self::$debug){
             $mail = new PHPMailer();
             try{

@@ -31,4 +31,11 @@ return[
         "hk" => "",
     ],
 
+    // true - 海外号码则使用
+    'is_yunpian' => false,
+
+    // 云片相关配置
+    'yunpian' => [
+        'app_id' => '',
+    ],
 ];

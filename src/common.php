@@ -33,18 +33,21 @@ function randCode(){
 function getTempMessage($module, $key, $lang, $params = []){
     try {
         //获取配置文件
-        $file = dirname(__FILE__) . "//..//" . "config//ContentConfig.php";
+        $file = dirname(__FILE__) . "//config//ContentConfig.php";
         $message = include $file;
         $body_info = $message[$module][$key];
         switch ($lang){
             case 'cn';
-                $body = $body_info['cn'];
+                $is_key ? $name = $is_key . '_cn' : $name = 'cn';
+                $body = $body_info[$name];
                 break;
             case 'en':
-                $body = $body_info['en'];
+                $is_key ? $name = $is_key . '_en' : $name = 'en';
+                $body = $body_info[$name];
                 break;
             default:
-                $body = $body_info['cn'];
+                $is_key ? $name = $is_key . '_cn' : $name = 'cn';
+                $body = $body_info[$name];
                 break;
         }
 
@@ -71,6 +74,73 @@ function getTempMessage($module, $key, $lang, $params = []){
 }
 
 /**
+ * 获取title-text结构的数据
+ * @param $module
+ * @param $key
+ * @param $lang
+ * @param array $params
+ * @return array|bool|int
+ */
+function getJpushMessage($module, $key, $lang, $params = []){
+    try {
+        //获取配置文件
+        $file = dirname(__FILE__) . "//config//ContentConfig.php";
+        $message = include $file;
+        $body_info = $message[$module][$key];
+        switch ($lang){
+            case 'cn';
+                $title = $body_info['title_cn'];
+                $body = $body_info['text_cn'];
+                break;
+            case 'en':
+                $title = $body_info['title_en'];
+                $body = $body_info['text_en'];
+                break;
+            default:
+                $title = $body_info['title_cn'];
+                $body = $body_info['text_cn'];
+                break;
+        }
+
+        //正则获取模板参数
+        $pattern = '/(?<=\{\$).*?(?=\})/';
+
+        $match_title = preg_match_all($pattern,$title,$result);
+        if ($match_title !== 0){
+            //判断参数是否齐全
+            $is_param = isCheckMessageParam($result[0], $params);
+            if ($is_param !== true)
+                return $is_param;
+
+            //替换模板字符串
+            foreach ($result[0] as $k=>$v){
+                $str_title = str_replace('{$'.$v.'}', $params[$v], $title);
+                ($str_title!=='') ? $title = $str_title : '';
+            }
+        }
+
+        $match_body = preg_match_all($pattern,$body,$result);
+        if ($match_body !== 0){
+            //判断参数是否齐全
+            $is_param = isCheckMessageParam($result[0], $params);
+            if ($is_param !== true)
+                return $is_param;
+
+            //替换模板字符串
+            foreach ($result[0] as $k=>$v){
+                $str_body = str_replace('{$'.$v.'}', $params[$v], $body);
+                ($str_body!=='') ? $body = $str_body : '';
+            }
+        }
+
+        return ['title' => $title, 'body' => $body];
+
+    }catch (Exception $exception){
+        return 404;
+    }
+}
+
+/**
  * 检查参数是否齐全
  */
 function isCheckMessageParam($need_params,$params){
@@ -80,4 +150,8 @@ function isCheckMessageParam($need_params,$params){
         }
     }
     return true;
+}
+
+function return_msg($status,$msg='',$data=[]){
+    return ['status'=>$status,'msg'=>$msg,'data'=>$data];
 }
