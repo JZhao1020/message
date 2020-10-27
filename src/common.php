@@ -8,7 +8,7 @@
 /**
  * 判斷是否中國號碼
  */
-function isForeign($phone){
+function isForeignPhone($phone){
     //判断使用国内/国际模板
     $pattern = '/^00.\d*$/';
     $res = preg_match($pattern,$phone);
@@ -30,7 +30,7 @@ function randCode(){
  * @param array $params
  * @return array|bool|int|mixed|string|string[]
  */
-function getMessage($module, $key, $lang, $params = []){
+function getTempMessage($module, $key, $lang, $params = []){
     try {
         //获取配置文件
         $file = dirname(__FILE__) . "//..//" . "config//ContentConfig.php";
@@ -53,7 +53,7 @@ function getMessage($module, $key, $lang, $params = []){
         $match = preg_match_all($pattern,$body,$result);
         if ($match!==0){
             //判断参数是否齐全
-            $is_param = checkMessageParam($result[0],$params);
+            $is_param = isCheckMessageParam($result[0],$params);
             if ($is_param !== true)
                 return $is_param;
 
@@ -66,7 +66,6 @@ function getMessage($module, $key, $lang, $params = []){
         return $body;
 
     }catch (Exception $exception){
-        $this->log->put('getMessage()方法获取模板内容异常'.'|'. $exception->getFile().'|'.$exception->getCode().'|'.$exception->getMessage());
         return 404;
     }
 }
@@ -74,7 +73,7 @@ function getMessage($module, $key, $lang, $params = []){
 /**
  * 检查参数是否齐全
  */
-function checkMessageParam($need_params,$params){
+function isCheckMessageParam($need_params,$params){
     foreach ($need_params as $k=>$v){
         if (!isset($params[$v])){
             return ['need_param'=>$v];

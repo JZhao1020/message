@@ -102,7 +102,7 @@ class EmailSend{
      * @return array|bool|int|mixed|string|string[]
      */
     public function sendText($email, $key, $params = []){
-        $body = getMessage('email', $key, $this->lang, $params);
+        $body = getTempMessage('email', $key, $this->lang, $params);
         if(!self::$debug){
             $mail = new PHPMailer();
             try{
