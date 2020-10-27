@@ -28,9 +28,10 @@ function randCode(){
  * @param string $key 模板key
  * @param string $lang
  * @param array $params
+ * @param bool $is_key
  * @return array|bool|int|mixed|string|string[]
  */
-function getTempMessage($module, $key, $lang, $params = []){
+function getTempMessage($module, $key, $lang, $params = [], $is_key = false){
     try {
         //获取配置文件
         $file = dirname(__FILE__) . "//config//ContentConfig.php";
