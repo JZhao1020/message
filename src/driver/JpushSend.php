@@ -51,13 +51,34 @@ class JpushSend{
                     ->setNotificationAlert($arr['body'])
                     ->send();
             }else{
+                $message = [
+                    'title' => $arr['title']
+                ];
+                $options = [
+                    'apns_production' => true,
+                ];
+                if(isset($jpush_extra['override_msg_id']) && $jpush_extra['override_msg_id']){
+                    $options['override_msg_id'] = $jpush_extra['override_msg_id'];
+                }
+
+                $android = [
+                    'title' => $arr['title'],
+                    'extras' => $jpush_extra,
+                    'style' => isset($jpush_extra['style']) ? $jpush_extra['style'] : 1,
+                    'large_icon' => isset($jpush_extra['large_icon']) ? $jpush_extra['large_icon'] : '',
+                ];
+                $ios = [
+                    'badge' => '+1',
+                    'content-available' => true,
+                    'extras' => $jpush_extra
+                ];
                 $res = self::$cliend->push()
                     ->setPlatform($platform)
                     ->addAlias($address)
-                    ->setMessage($arr['body'], $arr['title'])
-                    ->setOptions(null,null,null,null,null)
-                    ->addAndroidNotification($arr['body'], $arr['title'],null, $jpush_extra)
-                    ->addIosNotification($arr['body'],null,'+1',true,null, $jpush_extra)
+                    ->message($arr['body'], $message)
+                    ->options($options)
+                    ->androidNotification($arr['body'], $android)
+                    ->iosNotification($arr['body'],$ios)
                     ->send();
             }
         }catch (\Exception $e){
