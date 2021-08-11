@@ -26,6 +26,7 @@
         "jpush/jpush": "^3",
         "phpmailer/phpmailer": "^6",
         "yunpian/yunpian-php-sdk": "^1",
-        "yurunsoft/chinese-util": "^2"
+        "yurunsoft/chinese-util": "^2",
+        "aws/aws-sdk-php": "^3.178"
     }
 }

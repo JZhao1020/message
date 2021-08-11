@@ -41,4 +41,12 @@ return [
             'text_en'=>'Congratulations! You invested {$product_name} successfully. Please click here to check in investment record.',
         ],
     ],
+    // aws模板
+    'aws' => [
+        // 海外短信验证码模板
+        'sms_code' => [
+            'cn' => '【Wallet】亲爱的用户你好！验证码：{$rand}，验证码有效时间：15分钟。请勿向任何人包括客服提供验证码。',
+            'en' => '[Wallet]Dear user, your verification code is: {$rand}. Code is valid for 15 minutes. ',
+        ],
+    ],
 ];

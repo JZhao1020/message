@@ -15,6 +15,8 @@ class EmailSend{
     private static $pwd = '';
     private static $name = '';
     private static $system = '';
+    private static $port = '';
+    private static $secure = '';
     private static $debug = '';
     private static $lang;
 
@@ -33,6 +35,8 @@ class EmailSend{
         self::$pwd = $config['pwd'];
         self::$name = $config['name'];
         self::$system = $config['system'];
+        self::$port = $config['port'];
+        self::$secure = $config['secure'];
         self::$debug = $config['debug'];
     }
 
@@ -55,8 +59,8 @@ class EmailSend{
 
                 // 启用SMTP验证
                 $mail->SMTPAuth = true;
-                $mail->SMTPSecure 	= 'ssl';
-                $mail->Port 		= 465;
+                $mail->SMTPSecure 	= self::$secure;
+                $mail->Port 		= self::$port;
 
                 $FromName 			= self::$name;			    		//发送人昵称
                 $mail->WordWrap 	= 50;								//50个字符自动换行
@@ -65,12 +69,12 @@ class EmailSend{
                 $mail->Username 	= self::$user;
                 $mail->Password 	= self::$pwd;
                 //设置发件人
-                $mail->setFrom(self::$user , $FromName);
+                $mail->setFrom(self::$system , $FromName);
                 //  添加收件人
                 $mail->addAddress($email);
                 // 将电子邮件格式设置为HTML
                 $mail->isHTML(true);
-                $mail->Subject = self::$name . '-验证码';
+                $mail->Subject = self::$name;
                 if(self::$lang == 'en'){
                     $mail->Body = self::htmbodyen($email, $code);
                 }else if (self::$lang == 'hk'){
